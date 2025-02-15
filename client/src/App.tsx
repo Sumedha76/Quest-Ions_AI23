@@ -5,9 +5,8 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import Dashboard from './pages/Dashboard';
 import NavBar from './pages/NavBar';
-import SubmissionPage from './pages/SubmissionPage';
-import CreateTeamPage from './pages/CreateTeamPage';
-import MCQPage from './pages/MCQPage';
+import ForestFireDetection from "./pages/ForestFireDetection";
+
 const App: React.FC = () => {
   return (
     <Router>
@@ -19,9 +18,7 @@ const App: React.FC = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/submission" element={<SubmissionPage />} />
-            <Route path="/create-team" element={<CreateTeamPage />} />
-            <Route path="/mcq" element={<MCQPage />} />
+            <Route path="/forest-fire-detection" element={<ForestFireDetection />} />
           </Routes>
         </main>
       </div>

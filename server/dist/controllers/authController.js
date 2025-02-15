@@ -18,13 +18,14 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const User_1 = __importDefault(require("../models/User"));
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, location, selection } = req.body;
         const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-        const newUser = new User_1.default({ name, email, password: hashedPassword, role: 'team_member' });
+        const newUser = new User_1.default({ name, email, password: hashedPassword, location, selection });
         yield newUser.save();
         res.status(201).json({ message: 'User created successfully' });
     }
     catch (error) {
+        console.log(error);
         res.status(500).json({ message: error });
     }
 });

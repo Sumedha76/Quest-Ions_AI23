@@ -1,20 +1,65 @@
-import React from "react";
-import CreateTeam from "./CreateTeam";
-import JoinTeam from "./JoinTeam";
+// src/components/Dashboard.tsx
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import {
+  checkLocation,
+  uploadImage,
+  fetchHistoryData,
+} from "../services/apiService";
 
 const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
+  const [location, setLocation] = useState("");
+  const [locationResult, setLocationResult] = useState("");
+  const [image, setImage] = useState<File | null>(null);
+  const [uploadResult, setUploadResult] = useState("");
+  const [historyData, setHistoryData] = useState<string[]>([]);
+
+  const handleLocationCheck = async () => {
+    try {
+      const result = await checkLocation(location);
+      setLocationResult(result);
+    } catch (error) {
+      console.error("Location check failed:", error);
+      setLocationResult("Error checking location");
+    }
+  };
+
+  const handleImageUpload = async () => {
+    if (!image) return;
+    try {
+      const result = await uploadImage(image);
+      setUploadResult(result);
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      setUploadResult("Error uploading image");
+    }
+  };
+
+  useEffect(() => {
+    const getHistoryData = async () => {
+      try {
+        const data = await fetchHistoryData();
+        setHistoryData(data);
+      } catch (error) {
+        console.error("Error fetching history:", error);
+      }
+    };
+
+    getHistoryData();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-black text-white flex justify-center items-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex justify-center items-center p-4">
       <motion.div
-        className="w-full max-w-5xl p-8 bg-gray-900 rounded-3xl shadow-2xl"
+        className="w-full max-w-6xl p-8 bg-gray-800 rounded-3xl shadow-2xl"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        {/* Title */}
         <motion.h1
-          className="text-4xl font-bold text-center mb-12 text-blue-400"
+          className="text-5xl font-bold text-center mb-12 text-blue-400"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
@@ -22,45 +67,77 @@ const Dashboard: React.FC = () => {
           Team Dashboard
         </motion.h1>
 
-        {/* Content */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
-          {/* Create Team Section */}
-          <motion.div
-            className="p-6 bg-gray-800 rounded-2xl shadow-lg flex flex-col justify-between"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <h2 className="text-2xl font-semibold text-blue-400 mb-4">
-              Create a Team
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Location Input/Check Section */}
+          <motion.div className="p-6 bg-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
+            <h2 className="text-2xl font-semibold text-yellow-400 mb-4">
+              Location Input/Check
             </h2>
-            <p className="text-sm text-gray-400 mb-6">
-              Start your journey by creating a team. Set your team name, share
-              your team ID with members, and collaborate effectively!
-            </p>
-            <CreateTeam />
+            <input
+              type="text"
+              placeholder="Enter your location"
+              className="w-full p-3 rounded-lg mb-4 bg-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+            />
+            <button
+              onClick={handleLocationCheck}
+              className="w-full py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 transition-colors shadow-md hover:shadow-lg"
+            >
+              Check Location
+            </button>
+            <p className="mt-4 text-sm text-gray-300">{locationResult}</p>
           </motion.div>
 
-          {/* Join Team Section */}
-          <motion.div
-            className="p-6 bg-gray-800 rounded-2xl shadow-lg flex flex-col justify-between"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <h2 className="text-2xl font-semibold text-blue-400 mb-4">
-              Join a Team
+          {/* Upload Section */}
+          <motion.div className="p-6 bg-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
+            <h2 className="text-2xl font-semibold text-pink-400 mb-4">
+              Upload Image
             </h2>
-            <p className="text-sm text-gray-400 mb-6">
-              Already have a team ID? Join an existing team and get started
-              right away with your teammates.
-            </p>
-            <JoinTeam />
+            <input
+              type="file"
+              accept="image/*"
+              className="w-full p-2 rounded-lg mb-4 bg-gray-600 text-white"
+              onChange={(e) => setImage(e.target.files?.[0] || null)}
+            />
+            <button
+              onClick={handleImageUpload}
+              className="w-full py-2 rounded-lg bg-pink-500 hover:bg-pink-600 transition-colors shadow-md hover:shadow-lg"
+            >
+              Upload and Analyze
+            </button>
+            <p className="mt-4 text-sm text-gray-300">{uploadResult}</p>
           </motion.div>
-        </motion.div>
+
+          {/* History Section */}
+          <motion.div className="col-span-1 md:col-span-2 p-6 bg-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
+            <h2 className="text-2xl font-semibold text-green-400 mb-4">
+              History
+            </h2>
+            <ul className="text-sm text-gray-300 space-y-2 max-h-64 overflow-auto">
+              {historyData.length > 0 ? (
+                historyData.map((item, index) => (
+                  <li key={index}>• {item}</li>
+                ))
+              ) : (
+                <li>No history data available</li>
+              )}
+            </ul>
+          </motion.div>
+
+          {/* Forest Fire Detection Navigation */}
+          <motion.div className="col-span-1 md:col-span-2 p-6 bg-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
+            <h2 className="text-2xl font-semibold text-red-400 mb-4">
+              Forest Fire Detection
+            </h2>
+            <button
+              onClick={() => navigate("/forest-fire-detection")}
+              className="w-full py-2 rounded-lg bg-red-500 hover:bg-red-600 transition-colors shadow-md hover:shadow-lg"
+            >
+              Go to Forest Fire Detection
+            </button>
+          </motion.div>
+        </div>
       </motion.div>
     </div>
   );

@@ -8,17 +8,15 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const cors_1 = __importDefault(require("cors"));
 const authRouter_1 = __importDefault(require("./routes/authRouter"));
-const teamRouter_1 = __importDefault(require("./routes/teamRouter"));
-const mcqRouter_1 = __importDefault(require("./routes/mcqRouter"));
-const submissionRouter_1 = __importDefault(require("./routes/submissionRouter"));
-const problemRoutes_1 = __importDefault(require("./routes/problemRoutes"));
+const alertRoutes_1 = __importDefault(require("./routes/alertRoutes"));
+const imageRoutes_1 = __importDefault(require("./routes/imageRoutes"));
 // Load environment variables
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5000;
 // Middleware
 app.use((0, cors_1.default)({
-    origin: 'https://nisb-hackathon.vercel.app', // Allow only this origin
+    origin: 'http://localhost:3000', // Allow only this origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
     credentials: true // Allow cookies and credentials if needed
 }));
@@ -33,10 +31,10 @@ mongoose_1.default
     .catch((err) => console.error('MongoDB connection error:', err));
 // API Routes
 app.use('/api/auth', authRouter_1.default);
-app.use('/api/teams', teamRouter_1.default);
-app.use('/api/mcqs', mcqRouter_1.default);
-app.use('/api/submits', submissionRouter_1.default);
-app.use("/api/problems", problemRoutes_1.default);
+app.use("/api/alert", alertRoutes_1.default);
+app.use("/uploads", express_1.default.static("uploads"));
+// Routes
+app.use("/api/images", imageRoutes_1.default);
 // Health Check Route
 app.get('/', (req, res) => {
     res.send('Hackathon Platform API is running...');

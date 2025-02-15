@@ -5,14 +5,17 @@ import { motion } from "framer-motion";
 
 const SignupPage: React.FC = () => {
   const [name, setName] = useState("");
+  const [selection, setSelection] = useState("");
   const [email, setEmail] = useState("");
+  const [location, setLocation] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const navigate = useNavigate();
 
   const handleSignup = async () => {
     try {
-      await signup({ name, email, password });
+      // Updated payload to match the backend schema
+      await signup({ name, selection, email, location, password });
       setMessage({ type: "success", text: "Signup successful! Redirecting to login..." });
       setTimeout(() => navigate("/login"), 3000); // Redirect after 3 seconds
     } catch (error) {
@@ -61,10 +64,7 @@ const SignupPage: React.FC = () => {
         >
           {/* Name Input */}
           <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-semibold text-gray-400 mb-2"
-            >
+            <label htmlFor="name" className="block text-sm font-semibold text-gray-400 mb-2">
               Name
             </label>
             <input
@@ -77,12 +77,24 @@ const SignupPage: React.FC = () => {
             />
           </div>
 
+          {/* Selection Input */}
+          <div>
+            <label htmlFor="selection" className="block text-sm font-semibold text-gray-400 mb-2">
+              Selection
+            </label>
+            <input
+              id="selection"
+              type="text"
+              placeholder="e.g., Student, Forest Department"
+              value={selection}
+              onChange={(e) => setSelection(e.target.value)}
+              className="w-full p-4 bg-gray-800 text-white rounded-lg shadow-md focus:outline-none focus:ring-4 focus:ring-gray-500"
+            />
+          </div>
+
           {/* Email Input */}
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-semibold text-gray-400 mb-2"
-            >
+            <label htmlFor="email" className="block text-sm font-semibold text-gray-400 mb-2">
               Email
             </label>
             <input
@@ -95,12 +107,24 @@ const SignupPage: React.FC = () => {
             />
           </div>
 
+          {/* Location Input */}
+          <div>
+            <label htmlFor="location" className="block text-sm font-semibold text-gray-400 mb-2">
+              Location
+            </label>
+            <input
+              id="location"
+              type="text"
+              placeholder="Enter your location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="w-full p-4 bg-gray-800 text-white rounded-lg shadow-md focus:outline-none focus:ring-4 focus:ring-gray-500"
+            />
+          </div>
+
           {/* Password Input */}
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-semibold text-gray-400 mb-2"
-            >
+            <label htmlFor="password" className="block text-sm font-semibold text-gray-400 mb-2">
               Password
             </label>
             <input

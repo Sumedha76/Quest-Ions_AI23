@@ -11,7 +11,7 @@ const NavBar: React.FC = () => {
 
   return (
     <nav style={styles.navbar}>
-      <h1 style={styles.logo}>Hackathon</h1>
+      <h1 style={styles.logo}>Infothon</h1>
       <div className="md:hidden" style={styles.menuIcon} onClick={toggleMenu}>
         ☰
       </div>

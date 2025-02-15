@@ -3,10 +3,8 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import authRoutes from './routes/authRouter';
-import teamRoutes from './routes/teamRouter';
-import mcqRoutes from './routes/mcqRouter';
-import submissionRoutes from './routes/submissionRouter';
-import problemRoutes from "./routes/problemRoutes";
+import alertRoutes from "./routes/alertRoutes";
+import imageRoutes from "./routes/imageRoutes";
 
 // Load environment variables
 dotenv.config();
@@ -16,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: 'https://nisb-hackathon.vercel.app', // Allow only this origin
+  origin: 'http://localhost:3000', // Allow only this origin
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
   credentials: true // Allow cookies and credentials if needed
 }));
@@ -33,10 +31,12 @@ mongoose
 
 // API Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/teams', teamRoutes);
-app.use('/api/mcqs', mcqRoutes);
-app.use('/api/submits', submissionRoutes);
-app.use("/api/problems", problemRoutes);
+app.use("/api/alert", alertRoutes);
+app.use("/uploads", express.static("uploads"));
+
+// Routes
+app.use("/api/images", imageRoutes);
+
 
 // Health Check Route
 app.get('/', (req: Request, res: Response) => {

@@ -13,7 +13,7 @@ const HomePage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
-            Hackathon 2024
+            Forest Fire Detection
           </motion.h1>
           <motion.p
             className="text-xl md:text-2xl font-light text-gray-400"
@@ -21,7 +21,7 @@ const HomePage: React.FC = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 1 }}
           >
-            Innovate. Collaborate. Elevate.
+            Early Warning. Rapid Response. Safe Forests.
           </motion.p>
         </div>
       </header>
@@ -36,7 +36,7 @@ const HomePage: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            About the Hackathon
+            About the Detection System
           </motion.h2>
           <motion.p
             className="text-lg md:text-xl text-gray-400 leading-relaxed"
@@ -45,16 +45,12 @@ const HomePage: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            This hackathon is designed to challenge your problem-solving skills
-            while fostering innovation and collaboration. Compete with the best
-            minds to create impactful solutions over a weekend. Network with
-            industry professionals, gain hands-on experience, and win exciting
-            prizes!
+            Utilizing advanced image processing and AI, our system detects forest fires in real-time, minimizing damage and saving lives. Upload satellite or drone images to get instant predictions.
           </motion.p>
         </div>
       </section>
 
-      {/* Prizes Section */}
+      {/* Detection Status Section */}
       <section className="py-16 bg-gray-800">
         <div className="container mx-auto px-4 text-center">
           <motion.h2
@@ -64,10 +60,10 @@ const HomePage: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            Prizes
+            Detection Status
           </motion.h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {["First Place", "Second Place", "Third Place"].map((prize, index) => (
+            {["Danger", "Safe", "Indefinite"].map((status, index) => (
               <motion.div
                 key={index}
                 className="bg-black text-white rounded-lg p-8 shadow-xl border border-gray-600 transform transition-transform hover:scale-105"
@@ -76,13 +72,13 @@ const HomePage: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
               >
-                <h3 className="text-2xl font-semibold mb-4">{prize}</h3>
+                <h3 className="text-2xl font-semibold mb-4">{status}</h3>
                 <p className="text-lg">
                   {index === 0
-                    ? "$5,000 + Goodies"
+                    ? "Immediate action required."
                     : index === 1
-                    ? "$3,000 + Goodies"
-                    : "$2,000 + Goodies"}
+                    ? "No fire detected."
+                    : "Unclear, further analysis needed."}
                 </p>
               </motion.div>
             ))}
@@ -90,7 +86,7 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Schedule Section */}
+      {/* Process Flow Section */}
       <section className="py-16 bg-gray-900">
         <div className="container mx-auto px-4">
           <motion.h2
@@ -100,14 +96,14 @@ const HomePage: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            Event Schedule
+            How It Works
           </motion.h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { title: "Day 1: Kickoff", desc: "Introduction and team formations." },
-              { title: "Day 2: Hacking", desc: "Coding and mentoring sessions." },
-              { title: "Day 3: Finale", desc: "Project presentations and awards." },
-            ].map((day, index) => (
+              { title: "Step 1: Image Upload", desc: "Upload satellite or drone images." },
+              { title: "Step 2: Analysis", desc: "AI analyzes images for fire indicators." },
+              { title: "Step 3: Prediction", desc: "Get real-time fire status and alerts." },
+            ].map((step, index) => (
               <motion.div
                 key={index}
                 className="bg-black p-8 rounded-lg shadow-xl border border-gray-600 transform transition-transform hover:scale-105"
@@ -116,8 +112,8 @@ const HomePage: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: index * 0.2 }}
               >
-                <h3 className="text-2xl font-bold mb-4">{day.title}</h3>
-                <p className="text-gray-400">{day.desc}</p>
+                <h3 className="text-2xl font-bold mb-4">{step.title}</h3>
+                <p className="text-gray-400">{step.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -139,12 +135,12 @@ const HomePage: React.FC = () => {
           <div className="grid md:grid-cols-2 gap-8">
             {[
               {
-                question: "Who can participate?",
-                answer: "Students, professionals, and enthusiasts from all backgrounds are welcome.",
+                question: "Who can use this tool?",
+                answer: "Anyone with satellite or drone images can use this tool to detect forest fires.",
               },
               {
-                question: "Is it free?",
-                answer: "Yes, participation is completely free.",
+                question: "Is the detection in real-time?",
+                answer: "Yes, the system provides real-time predictions and alerts.",
               },
             ].map((faq, index) => (
               <motion.div
@@ -173,7 +169,7 @@ const HomePage: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 1 }}
           >
-            &copy; 2024 Hackathon. All rights reserved. | Powered by React and Tailwind CSS.
+            &copy; 2024 Forest Fire Detection. All rights reserved. | Powered by React and Tailwind CSS.
           </motion.p>
         </div>
       </footer>
