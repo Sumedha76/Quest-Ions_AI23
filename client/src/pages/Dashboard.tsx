@@ -1,12 +1,8 @@
-// src/components/Dashboard.tsx
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import {
-  checkLocation,
-  uploadImage,
-  fetchHistoryData,
-} from "../services/apiService";
+import { fetchHistoryData, uploadImage } from "../services/apiService";
+import axios from "axios";
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -16,13 +12,36 @@ const Dashboard: React.FC = () => {
   const [uploadResult, setUploadResult] = useState("");
   const [historyData, setHistoryData] = useState<string[]>([]);
 
+  // Function to fetch latitude and longitude using OpenStreetMap API
   const handleLocationCheck = async () => {
+    if (!location) {
+      alert("Please enter a location!");
+      return;
+    }
     try {
-      const result = await checkLocation(location);
-      setLocationResult(result);
+      const response = await axios.get(`https://nominatim.openstreetmap.org/search`, {
+        params: {
+          q: location,
+          format: "json",
+          limit: 1,
+        },
+      });
+
+      if (response.data.length === 0) {
+        setLocationResult("Location not found.");
+        alert("Location not found. Try another one.");
+        return;
+      }
+
+      const { lat, lon } = response.data[0];
+      setLocationResult(`Latitude: ${lat}, Longitude: ${lon}`);
+
+      // Display result in a popup
+      alert(`📍 Location Found!\nLatitude: ${lat}\nLongitude: ${lon}`);
+      
     } catch (error) {
       console.error("Location check failed:", error);
-      setLocationResult("Error checking location");
+      setLocationResult("Error fetching location data.");
     }
   };
 
@@ -84,7 +103,7 @@ const Dashboard: React.FC = () => {
               onClick={handleLocationCheck}
               className="w-full py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 transition-colors shadow-md hover:shadow-lg"
             >
-              Check Location
+              Get Coordinates
             </button>
             <p className="mt-4 text-sm text-gray-300">{locationResult}</p>
           </motion.div>
