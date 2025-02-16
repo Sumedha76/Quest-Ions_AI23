@@ -35,7 +35,7 @@ Make sure you have the following installed:
 ## 🚀 Installation  
 *npm install*
 
-##Environment Variables:
+##Environment Variables:##
 TWILIO_ACCOUNT_SID=your_account_id
 TWILIO_AUTH_TOKEN=your_AUTH_TOKEN
 TWILIO_PHONE_NUMBER=Twilio__PHONE_NUMBER
@@ -44,7 +44,6 @@ RECIPIENT_PHONE_NUMBER=Verified__PHONE_NUMBER
 EMAILJS_SERVICE_ID=YOUR__SERVICE_ID
 EMAILJS_TEMPLATE_ID=YOUR__TEMPLATE_ID
 EMAILJS_USER_ID=YOUR__USER_ID
-##
 
 1. **Clone the repository:**  
 ```sh
