@@ -2,11 +2,14 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import {
   checkLocation,
   uploadImage,
   fetchHistoryData,
 } from "../services/apiService";
+import Popup from "../components/popup"; // Import the Popup component
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -15,14 +18,37 @@ const Dashboard: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
   const [uploadResult, setUploadResult] = useState("");
   const [historyData, setHistoryData] = useState<string[]>([]);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleLocationCheck = async () => {
+    if (!location) {
+      setPopupMessage("Please enter a location!");
+      return;
+    }
     try {
-      const result = await checkLocation(location);
-      setLocationResult(result);
+      const response = await axios.get(`https://nominatim.openstreetmap.org/search`, {
+        params: {
+          q: location,
+          format: "json",
+          limit: 1,
+        },
+      });
+
+      if (response.data.length === 0) {
+        setLocationResult("Location not found.");
+        setPopupMessage("Location not found. Try another one.");
+        return;
+      }
+
+      const { lat, lon } = response.data[0];
+      setLocationResult(`Latitude: ${lat}, Longitude: ${lon}`);
+      setPopupMessage(`Location Found!\n\nLatitude: ${lat}\n\nLongitude: ${lon}`);
+      
     } catch (error) {
       console.error("Location check failed:", error);
-      setLocationResult("Error checking location");
+      setLocationResult("Error fetching location data.");
+      setPopupMessage("Error fetching location data.");
     }
   };
 
@@ -31,9 +57,13 @@ const Dashboard: React.FC = () => {
     try {
       const result = await uploadImage(image);
       setUploadResult(result);
+      setPopupMessage(`Upload Result: ${result}`);
+      setShowPopup(true);
     } catch (error) {
       console.error("Image upload failed:", error);
       setUploadResult("Error uploading image");
+      setPopupMessage("Error uploading image");
+      setShowPopup(true);
     }
   };
 
@@ -41,14 +71,19 @@ const Dashboard: React.FC = () => {
     const getHistoryData = async () => {
       try {
         const data = await fetchHistoryData();
-        setHistoryData(data);
+        setHistoryData(data || []);
       } catch (error) {
         console.error("Error fetching history:", error);
+        setHistoryData([]);
       }
     };
 
     getHistoryData();
   }, []);
+  const closePopup = () => {
+    setPopupMessage(""); // Close the popup by setting it to an empty string
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex justify-center items-center p-4">
@@ -109,22 +144,6 @@ const Dashboard: React.FC = () => {
             <p className="mt-4 text-sm text-gray-300">{uploadResult}</p>
           </motion.div>
 
-          {/* History Section */}
-          <motion.div className="col-span-1 md:col-span-2 p-6 bg-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
-            <h2 className="text-2xl font-semibold text-green-400 mb-4">
-              History
-            </h2>
-            <ul className="text-sm text-gray-300 space-y-2 max-h-64 overflow-auto">
-              {historyData.length > 0 ? (
-                historyData.map((item, index) => (
-                  <li key={index}>• {item}</li>
-                ))
-              ) : (
-                <li>No history data available</li>
-              )}
-            </ul>
-          </motion.div>
-
           {/* Forest Fire Detection Navigation */}
           <motion.div className="col-span-1 md:col-span-2 p-6 bg-gray-700 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
             <h2 className="text-2xl font-semibold text-red-400 mb-4">
@@ -139,6 +158,14 @@ const Dashboard: React.FC = () => {
           </motion.div>
         </div>
       </motion.div>
+
+      {/* Popup Component */}
+      {showPopup && (
+        <Popup
+          message={popupMessage}
+          onClose={() => setShowPopup(false)}
+        />
+      )}
     </div>
   );
 };

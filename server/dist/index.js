@@ -10,6 +10,7 @@ const cors_1 = __importDefault(require("cors"));
 const authRouter_1 = __importDefault(require("./routes/authRouter"));
 const alertRoutes_1 = __importDefault(require("./routes/alertRoutes"));
 const imageRoutes_1 = __importDefault(require("./routes/imageRoutes"));
+const historyRoutes_1 = __importDefault(require("./routes/historyRoutes"));
 // Load environment variables
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -33,6 +34,7 @@ mongoose_1.default
 app.use('/api/auth', authRouter_1.default);
 app.use("/api/alert", alertRoutes_1.default);
 app.use("/uploads", express_1.default.static("uploads"));
+app.use("/api/history", historyRoutes_1.default);
 // Routes
 app.use("/api/images", imageRoutes_1.default);
 // Health Check Route

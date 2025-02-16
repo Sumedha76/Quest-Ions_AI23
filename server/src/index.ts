@@ -5,6 +5,7 @@ import cors from 'cors';
 import authRoutes from './routes/authRouter';
 import alertRoutes from "./routes/alertRoutes";
 import imageRoutes from "./routes/imageRoutes";
+import historyRoutes from "./routes/historyRoutes";
 
 // Load environment variables
 dotenv.config();
@@ -33,6 +34,7 @@ mongoose
 app.use('/api/auth', authRoutes);
 app.use("/api/alert", alertRoutes);
 app.use("/uploads", express.static("uploads"));
+app.use("/api/history", historyRoutes);
 
 // Routes
 app.use("/api/images", imageRoutes);
